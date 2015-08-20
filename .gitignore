@@ -1,6 +1,7 @@
 *.gem
 *.rbc
 *.yaml
+*.yml
 
 /.config
 /coverage/

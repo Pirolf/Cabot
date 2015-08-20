@@ -34,7 +34,7 @@ File.open(imgPath, 'wb') do |f|
 	f.write(open(imgUrl).read)
 end
 
-caffeCmd = 'GLOG_minloglevel=1 ipython categorize.ipy ' + imgPath
+caffeCmd = 'GLOG_minloglevel=1 python categorize.py ' + imgPath
 puts caffeCmd 
 predictedCategories = nil
 Open3.popen3(caffeCmd){|stdin, stdout, stderr, wait_thr|

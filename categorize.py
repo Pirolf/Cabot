@@ -5,7 +5,6 @@ import json
 import yaml
 import sys
 import os
-#%matplotlib inline
 
 # Make sure that caffe is on the python path:
 configStream = open("FluffyHaiiro.yaml", "r")
@@ -24,7 +23,7 @@ plt.rcParams['image.cmap'] = 'gray'
 
 if not os.path.isfile(caffe_root + '/models/bvlc_reference_caffenet/bvlc_reference_caffenet.caffemodel'):
     #print("Downloading pre-trained CaffeNet model...")
-    !../scripts/download_model_binary.py ../models/bvlc_reference_caffenet
+    os.system('python ../scripts/download_model_binary.py ../models/bvlc_reference_caffenet')
 
 caffe.set_mode_cpu()
 net = caffe.Net(caffe_root + '/models/bvlc_reference_caffenet/deploy.prototxt',
@@ -56,7 +55,7 @@ imagenet_labels_filename = caffe_root + '/data/ilsvrc12/synset_words.txt'
 try:
     labels = np.loadtxt(imagenet_labels_filename, str, delimiter='\t')
 except:
-    !../data/ilsvrc12/get_ilsvrc_aux.sh
+    os.system('. ../data/ilsvrc12/get_ilsvrc_aux.sh')
     labels = np.loadtxt(imagenet_labels_filename, str, delimiter='\t')
 
 # sort top k predictions from softmax output
