@@ -22,8 +22,6 @@ ROOT_ABSOLUTE_PATH = Dir.pwd
 #	follow user
 #end
 
-#turn off google logging
-
 imgUrl = 'http://sv6.postjung.com/picpost/data/177/177362-7-6387.jpg'
 
 imgFolderPath = ROOT_ABSOLUTE_PATH + '/images'
@@ -34,6 +32,7 @@ File.open(imgPath, 'wb') do |f|
 	f.write(open(imgUrl).read)
 end
 
+#turn off google logging
 caffeCmd = 'GLOG_minloglevel=1 python categorize.py ' + imgPath
 puts caffeCmd 
 predictedCategories = nil
