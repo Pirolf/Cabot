@@ -8,7 +8,7 @@ import cStringIO as StringIO
 import urllib
 import caffe
 
-REPO_DIRNAME = os.path.abspath(os.path.dirname(os.path.abspath(__file__)) + '/../caffe')
+REPO_DIRNAME = os.path.abspath(os.path.dirname(os.path.abspath(__file__)) + '/../../caffe')
 
 class ImageClassifier(object):
   default_args = {

@@ -17,6 +17,8 @@ token config[:token]
 ROOT_ABSOLUTE_PATH = Dir.pwd
 IMG_FOLDER_PATH = ROOT_ABSOLUTE_PATH + '/images'
 VALID_IMG_TYPES = [:png, :jpeg]
+CLASSIFIER_MAIN_PATH  = ROOT_ABSOLUTE_PATH + '/classifier/Classify.py'
+RESULT_PATH = ROOT_ABSOLUTE_PATH + '/result.json'
 #search("cat", limit: 10) do |tweet|
 	#retweet tweet.id
 #end
@@ -51,23 +53,30 @@ def categorize imgUrl
 	#check if size is large enough
 	if !isSizeLargeEnough(imgUrl) then return nil end
 
-	caffeCmd = 'GLOG_minloglevel=1 python Classify.py ' + imgUrl
-	puts caffeCmd 
-	predictedCategories = nil
-	result = JSON.parse(IO.read('result.json'))
-
-	result.each do |r|
-		p r
-	end
+	caffeCmd = 'GLOG_minloglevel=1 python ' + CLASSIFIER_MAIN_PATH + ' ' + imgUrl
+	puts imgUrl
+	system caffeCmd
 end
 
 search("cute cat", {limit: 10, inluded_entities: true}) do |t|
-	puts "nyo"
 	if t.media?
 		t.media.each do |m|
 			imgUrl =  m.media_url_https.to_s
-			imgCategories = categorize imgUrl
-			p imgCategories
+			categorize imgUrl
+			result = JSON.parse(IO.read(RESULT_PATH))
+			p result
+
+			result.each do |entry|
+				#category
+				category = entry[0]
+				confidence = entry[1].to_f
+				containsCat = category.include? ' cat' || category ==  'cat'
+				if containsCat && confidence >  0.8
+					retweet t
+					puts 'retweeted'
+					break
+				end
+			end
 		end
 	end
 end
