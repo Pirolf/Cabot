@@ -51,24 +51,14 @@ def categorize imgUrl
 	#check if size is large enough
 	if !isSizeLargeEnough(imgUrl) then return nil end
 
-	timestamp = Time.now.getutc.to_i
-	imgPath = IMG_FOLDER_PATH + '/' + timestamp.to_s + '.jpg'
-
-	File.open(imgPath, 'wb') do |f|
-		f.write(open(imgUrl).read)
-	end
-
-	#turn off google logging
-	caffeCmd = 'GLOG_minloglevel=1 python categorize.py ' + imgPath
+	caffeCmd = 'GLOG_minloglevel=1 python Classify.py ' + imgUrl
 	puts caffeCmd 
 	predictedCategories = nil
-	Open3.popen3(caffeCmd){|stdin, stdout, stderr, wait_thr|
-		predictedCategories = JSON.parse(stdout.read)
-		stdin.close
-		stdout.close
-		stderr.close
-	}
-	predictedCategories.map!{|c| c.split(' ', 2).last}
+	result = JSON.parse(IO.read('result.json'))
+
+	result.each do |r|
+		p r
+	end
 end
 
 search("cute cat", {limit: 10, inluded_entities: true}) do |t|
@@ -81,6 +71,3 @@ search("cute cat", {limit: 10, inluded_entities: true}) do |t|
 		end
 	end
 end
-
-
-

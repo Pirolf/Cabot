@@ -1,7 +1,9 @@
 *.gem
 *.rbc
+*.pyc
 *.yaml
 *.yml
+result.json
 
 /.config
 /coverage/
